@@ -1,0 +1,8 @@
+# file da non ignorare anche se nascosto (dot-file).
+!.gitignore
+
+#file prodotti da scons
+*.hex
+*.elf
+build
+.sconsign.dblite

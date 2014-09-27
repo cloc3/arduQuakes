@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <script type="text/javascript" src="js/scripts.js"></script>
+  <script type="text/javascript" src="js/ajax.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/stile.css">
+  <link rel="stylesheet" type="text/css" href="css/layout.css">
+  <title>adxl345</title>
+	<script type="application/javascript">
+	function avvio() {
+		var finestraTemporale = 10000000; // tempo necessario ad un impulso per attraversare la finestra, in millisecondi
+		gestioneGrafici(finestraTemporale/600);
+	}
+	</script>
+</head>
+
+<body onload="avvio()">
+	<header id="header">
+		<h1>Accelerometro Adxl345</h1>
+		<img src="img/apriletuefinestre.jpg">
+	</header>
+
+<section id="container">
+	<nav id="menu"></nav>
+	<div id="areaDiLavoro" style="display:block">
+		<div id="asseX">asse X
+			<canvas id="graficoX" width="600px" height="100px" />
+		</div>
+
+		<div id="asseY">asse Y
+			<canvas id="graficoY" width="600px" height="100px" />
+		</div>
+
+		<div id="asseZ">asse Z
+			<canvas id="graficoZ" width="600px" height="100px" />
+		</div>
+		<div id="test"></div>
+	</div>
+</section>
+
+	<footer id="footer">
+		<p>
+			<br>
+  		<a href="http://jigsaw.w3.org/css-validator/check/referer">
+				<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" alt="validazione CSS">
+			</a>
+  		<a href="http://validator.w3.orgi/check/referer" target="_blank">
+				<img src="http://www.w3.org/Icons/valid-html401" alt="validazione HTML">
+			</a>
+  		<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
+				<img src="img/licenza.png" alt="licenza CC">
+			</a>
+			<br>
+  		Attribuzione-Condividi allo stesso modo 4.0
+		</p>
+  
+	</footer>
+
+
+</body>
+</html>

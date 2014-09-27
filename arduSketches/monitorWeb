@@ -1,0 +1,74 @@
+// sketch for adxl345 module.
+// improved to  control input/output between serial usb port and direct ethernet http requests both - using arduino ethShield: http://arduino.cc/en/Main/ArduinoEthernetShield
+
+#include <Wire.h>
+#include <Ethernet.h>
+#include <http.h>
+#include <event.h>
+EthernetServer server(8000);
+
+void setup() {
+	byte mac[] = {
+		0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+	IPAddress ip(172,16,1,111);							//fix it for your net
+
+  Ethernet.begin(mac, ip);
+  server.begin();
+/*
+  Serial.print("\nserver is at ");
+  Serial.println(Ethernet.localIP());
+*/
+	Wire.begin();
+	Serial.begin(115200);
+	initAdxl345();
+}
+
+int giro =0;
+void loop() {
+	struct strBuf *header;
+	struct strBuf *firstLine;			//The header firstline pass a command to the server (currrently the number of adxl sensor readings)
+	struct paramGet *cmdParser;
+	struct keyFind *command;
+	struct event *dataCapture;
+
+	firstLine = serialEvent();
+	if (firstLine->isSerial) {
+		firstLine->initialized = false;
+		cmdParser = paramFinder(firstLine->buffer, firstLine->l, 'I');
+		command = cmdFind(cmdParser, 'n');
+		if (command->keyFounded) {
+			for (int n=0; n< cmdParser->pointer->nSensorReadings; n++) {
+				dataCapture = adxl345Driver();
+				Serial.print(dataCapture->str);
+				//delay(DELAY);
+			}
+		}
+	}
+
+	EthernetClient client = server.available();			//Waits for an http request from arduino ethShield
+	if (client) {
+		//Serial.println("new client");
+		header = readHeader(client);
+		firstLine = getline(header->buffer,header->l);
+		cmdParser = paramFinder(firstLine->buffer, firstLine->l-10, 'I');
+		command = cmdFind(cmdParser, 'n');
+
+	if (command->keyFounded) {
+		client.println("HTTP/1.1 200 OK");
+		client.println("Content-Type: text/plain");
+		client.println("Access-Control-Allow-Origin: *");
+		//client.println("Connection: close");
+		client.println("");
+
+		client.print("\n");
+		for (int n=0; n< command->keyName->nSensorReadings; n++) {
+			dataCapture = adxl345Driver();
+			Serial.print(dataCapture->str);
+			client.print(dataCapture->str);
+			delay(DELAY);
+		}
+}
+		client.stop();
+		//Serial.println("client disconnected");
+	}
+}
