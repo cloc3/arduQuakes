@@ -23,7 +23,7 @@ enjoy.
 if you need simply an output on command line you may replace the step 4 in this way:
 
 4.	exec 5 <>/dev/arduino #use here the real device created in your system.
-5.	head -n 10 </dev/arduino & echo n=10 >/dev/arduino
+5.	head -n 10 <&5 & echo n=10 >&5
 
 p.s.: current version of arduino sketches is improved to work with arduino ethshield:
 	http://arduino.cc/en/Main/ArduinoEthernetShield
